@@ -1,14 +1,14 @@
-const inquirer = require(“inquirer”);
-const fs = require(“fs”);
-const axios = require(“axios”);
-const util = require(“util”);
+const inquirer = require("inquirer");
+const fs = require("fs");
+const axios = require("axios");
+const util = require("util");
 const writeFileAsync = util.promisify(fs.writeFile);
 function promptUser() {
  return inquirer.prompt([
    {
-     type: “input”,
-     name: “gituser”,
-     message: “What is your GitHub username?“,
+     type: "input",
+     name: "gituser",
+     message: "What is your GitHub username?",
    },
  ])
 }
@@ -17,7 +17,6 @@ async function gitHubInfo(username) {
    const queryUrl = `https://api.github.com/users/${username}`;
    const response = await axios.get(queryUrl)
    const user = response.data;
-   const stars = await getStars(${queryUrl}/starred);
    const gituser = {
      name: user.name,
      company: user.company,
@@ -26,7 +25,6 @@ async function gitHubInfo(username) {
      location: user.location,
      link: user.html_url,
      numRepos: user.public_repos,
-     stars,
      followers: user.followers,
      email: user.email
    }
@@ -36,9 +34,7 @@ async function gitHubInfo(username) {
    console.log(err);
  }
 }
-function getStars(url) {
- return axios.get(url).then(response => response.data.map(({ name }) => name).length);
-}
+
 function generateHTML(gotGitHub) {
  return `
 <!DOCTYPE html>
@@ -68,17 +64,17 @@ promptUser()
    try {
      const gotGitHub = await gitHubInfo(answers.gituser);
      // const color = answers.color
-     console.log(“test”, gotGitHub);
+     console.log("test", gotGitHub);
      const html = generateHTML(gotGitHub);
      // console.log(color);
-     return writeFileAsync(“index.html”, html);
+     return writeFileAsync("index.html", html);
    } catch (err) {
-     console.log(“error here”, err);
+     console.log("error here", err);
    }
  })
  .then(function () {
-   console.log(“wrote to index.html”);
+   console.log("wrote to index.html");
  })
  .catch(function (err) {
    console.log(err);
- });\
+ });
